@@ -1,0 +1,63 @@
+﻿<Window x:Class="ImagePanZoomRotateFilter.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vw="clr-namespace:ImagePanZoomRotateFilter.Views"
+        xmlns:vm="clr-namespace:ImagePanZoomRotateFilter.ViewModels"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImagePanZoomRotateFilter.Views"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" >
+
+    <Window.DataContext>
+        <vm:MedicalImageViewModel/>
+    </Window.DataContext>
+
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+
+        </Grid.ColumnDefinitions>
+
+        <Image  x:Name="mainImage" Source="/Resources/Knee.png"
+               vw:MouseBehavior.MouseLeftButtonDownCommand="{Binding MouseLeftButtonDownCommand}"
+               vw:MouseBehavior.MouseLeftButtonUpCommand="{Binding MouseLeftButtonUpCommand}"
+               vw:MouseBehavior.MouseMoveCommand="{Binding MouseLeftButtonUpCommand}"
+               vw:MouseBehavior.MouseEnterCommand="{Binding MouseEnterCommand}"
+               vw:MouseBehavior.MouseLeaveCommand="{Binding MouseLeaveCommand}"
+               vw:MouseBehavior.MouseWheelCommand="{Binding MouseWheelCommand}" ClipToBounds="True" >
+            <Image.RenderTransform>
+
+                <!-- TransformGroup enables you to apply multiple transforms. In 
+               this example, the button is scaled and rotated. -->
+                <TransformGroup>
+
+                    <!-- Triple the size (scale) of the button in the Y direction. -->
+                    <ScaleTransform ScaleY="{Binding Zoom}" />
+
+                    <!-- Rotate the button by 45 degrees. -->
+                    <RotateTransform Angle="{Binding Rotate}" CenterX="250" CenterY="250" />
+
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
+        <StackPanel Grid.Column="1" Margin="20">
+            <Label>Open VMI File</Label>
+            <Button>Open</Button>
+            <Label>Open PNG File</Label>
+            <Button Command="{Binding LoadImageCommand}">Open</Button>
+            <Label >Close Default File</Label>
+
+            <Button>Close</Button>
+            <Label Content="{Binding Rotate, StringFormat='{}{0:#}'}"></Label>
+            <Slider SmallChange="90"  TickPlacement="BottomRight" TickFrequency="90" 
+                    Value="{Binding Rotate}" Minimum="0" Maximum="360" IsSnapToTickEnabled="False"  />
+            <Label>Choose Filter</Label>
+            <ComboBox></ComboBox>
+            <Separator Margin="10,50,10,5"/>
+            <Label>Use Mouse Wheel To Zoom</Label>
+            <Label>Drag Image To Pan</Label>
+        </StackPanel>
+    </Grid>
+</Window>
